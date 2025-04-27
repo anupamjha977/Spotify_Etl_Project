@@ -5,28 +5,29 @@ This ETL (Extract, Transform, Load) pipeline processes data from the Spotify API
 
 ## Architecture
 
+![Spotify Pipeline Architecture](https://github.com/anupamjha977/Spotify_Etl_Project/blob/main/spotify_pipeline-architecture.png)
+
 The diagram illustrates the following data flow:
 
-### 1. Data Extraction
-- The pipeline begins by extracting data from the **Spotify API**.
-- An **AWS Lambda** function is triggered on a schedule (e.g., daily) by **Amazon CloudWatch** to extract raw data from the Spotify API.
-- The raw data is stored in **Amazon S3** in its raw format.
+### Data Extraction:
+- The pipeline starts with the **Spotify API** as the data source.
+- An **AWS Lambda** function, triggered on a schedule (e.g., daily) by **Amazon CloudWatch**, extracts raw data from the Spotify API.
+- The extracted raw data is stored in **Amazon S3** in its raw format.
 
-### 2. Data Transformation
-- Upon the arrival of new raw data in S3, an **S3 Trigger** invokes another **AWS Lambda** function.
-- This Lambda function reads the raw data, performs necessary transformations such as cleaning, filtering, and aggregating, and writes the transformed data back to a different location in **Amazon S3**.
+### Data Transformation:
+- Upon the arrival of new raw data in S3, an S3 trigger invokes another **AWS Lambda** function.
+- This Lambda function reads the raw data, performs necessary transformations (cleaning, filtering, aggregating, etc.), and writes the transformed data back to a different location in Amazon S3.
 
-### 3. Data Loading and Cataloging
+### Data Loading and Cataloging:
 - An **AWS Glue Crawler** is used to crawl the transformed data in S3.
 - The Glue Crawler infers the schema of the transformed data and creates or updates metadata in the **AWS Glue Data Catalog**.
-- The **AWS Glue Data Catalog** serves as a central repository for metadata, making it easy to query and analyze the data.
+- AWS Glue Data Catalog serves as a central repository for metadata, making it easy to query and analyze the data.
 
-### 4. Data Analysis
+### Data Analysis:
 - **Amazon Athena**, a serverless query service, is used to analyze the transformed data.
-- Users can run SQL queries in Athena to gain insights from the Spotify data stored in S3.
+- Users can use SQL queries in Athena to gain insights from the Spotify data.
 
 ## Components
-
 - **Spotify API**: The source of the data.
 - **Amazon CloudWatch**: Used to schedule the data extraction process.
 - **AWS Lambda**: Serverless compute service used for data extraction and transformation.
@@ -36,31 +37,20 @@ The diagram illustrates the following data flow:
 - **Amazon Athena**: Serverless SQL query service to analyze data.
 
 ## Key Considerations
-
-- **Scalability**: 
-  - Lambda and S3 scale automatically to handle large volumes of data. Athena is also highly scalable, processing large datasets quickly.
-  
-- **Cost-effectiveness**: 
-  - The serverless nature of Lambda and Athena ensures that costs are optimized, as you only pay for what you use. S3 offers cost-effective storage solutions.
-
-- **Fault Tolerance**: 
-  - AWS services like Lambda, S3, and Athena are designed to be highly available and fault-tolerant, ensuring the pipeline runs smoothly even in the event of a failure.
-
-- **Automation**: 
-  - The entire pipeline is automated using **CloudWatch** and **S3 triggers**, eliminating manual intervention.
-
-- **Data Quality**: 
-  - The transformation step in Lambda ensures the raw data is cleaned, filtered, and aggregated before loading it into the catalog, ensuring high-quality data for analysis.
-
-- **Schema Evolution**: 
-  - The **Glue Crawler** handles schema changes in the data over time, ensuring that any changes to the data structure are automatically reflected in the Glue Data Catalog.
-
-- **Security**: 
-  - Appropriate **IAM roles** and permissions should be configured for all AWS services to ensure data security and access control throughout the pipeline.
+- **Scalability**: Lambda and S3 can scale to handle large volumes of data. Athena is also highly scalable.
+- **Cost-effectiveness**: The serverless nature of Lambda and Athena helps to optimize costs, as you only pay for what you use. S3 provides cost-effective storage.
+- **Fault Tolerance**: AWS services are designed to be highly available and fault-tolerant.
+- **Automation**: The pipeline is automated using CloudWatch and S3 triggers.
+- **Data Quality**: The transformation step in Lambda is crucial for ensuring data quality.
+- **Schema Evolution**: Glue Crawler can handle schema changes in the data over time.
+- **Security**: Appropriate IAM roles and permissions should be configured for all AWS services to ensure data security.
 
 ## Conclusion
+This Spotify ETL pipeline efficiently extracts, transforms, and loads Spotify data into a format suitable for analysis. By leveraging AWS services such as Lambda, S3, Glue, and Athena, the pipeline is designed to be cost-effective, scalable, and fault-tolerant.
 
-This Spotify ETL Pipeline on AWS leverages managed services to automate the extraction, transformation, and loading of Spotify data, making it available for analysis via Athena. It is scalable, cost-effective, and secure, ensuring high-quality insights can be derived from the data while minimizing operational overhead.
+---
+
+For more details, feel free to check the code and setup in this repository.
 
 
 
